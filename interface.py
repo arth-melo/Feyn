@@ -104,9 +104,10 @@ titulo = ctk.CTkLabel(
     text_color=COLORS["text_white"],
     fg_color="transparent",
     bg_color=cor_gradiente(40 / CARD_H),
+	anchor = "w",
     font=ctk.CTkFont(family="Georgia", size=22, weight="bold"),
 )
-card_canvas.create_window(CARD_W // 2, 40, anchor="center", window=titulo)
+card_canvas.create_window(CARD_W // 2, 40, anchor="nw", window=titulo)
 
 status = ctk.CTkLabel(
     card_canvas,
@@ -181,4 +182,4 @@ def consultar_selecao():
 
 
 ky.add_hotkey("alt+a", consultar_selecao, suppress=True)
-app.mainloop()
+app.mainloop() 
