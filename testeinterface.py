@@ -1,7 +1,19 @@
 
 import customtkinter as ctk
-sinonimos_list = ['sinonimo1', 'sinonimo2', 'sinonimo3']
-respostaIA = ['míngua', 'Substantivo feminino', 'Míngua é quando falta alguma coisa que era necessária. Não é só "não ter" — é sentir a falta, ver o tanto diminuindo até quase acabar', 'Pense numa torneira pingando cada vez mais devagar até quase parar: enquanto ainda cai água, mas pouca, essa água está "à míngua"', "à mingua de", "viver à mingua", "minguar (verbo)", sinonimos_list, 'Derivação regressiva de "minguar", que tem relação etimológica com o latim vulgar minuāre (ligado a minuĕre, "diminuir") — segundo os dicionários consultados.']
+
+sinonimos_list = ['escassez', 'carência', 'falta', 'penúria']
+respostaIA = [
+    'míngua',
+    'Substantivo feminino',
+    'Míngua é quando falta alguma coisa que era necessária. Não é só "não ter" — é sentir a falta, ver o tanto diminuindo até quase acabar',
+    'Pense numa torneira pingando cada vez mais devagar até quase parar: enquanto ainda cai água, mas pouca, essa água está "à míngua"',
+    'à míngua de provas, o processo foi arquivado',
+    'a família vivia à míngua depois da crise',
+    'sem a renda rural, o comércio míngua',
+    sinonimos_list,
+    'A palavra "míngua" vem por derivação regressiva do verbo "minguar", que tem relação etimológica com o latim vulgar "minuāre" (ligado a "minuĕre", "diminuir").'
+]
+
 informacoes =  {
     'palavra' : respostaIA[0],
     'descricao' : respostaIA[1],
@@ -26,7 +38,6 @@ COLORS = {
     "azul escuro": "#233263",
 
 }
-app.geometry("500x450")
 app.configure(fg_color=COLORS["bg"])
 
 #FUNDO PRETO
@@ -64,12 +75,6 @@ palavra.grid(
 
 #DESCRICAO
 descricao = ctk.CTkLabel(master=fundo_preto2, text=informacoes['descricao'], font=("Roboto", 10), text_color=COLORS["Cinza azulado"], width=1, height=1)
-descricao.place(
-x=18,
-y=palavra.winfo_y() + palavra.winfo_height() + 28,
-      )
- 
-
 
 #DEFINICAO
 definicao = ctk.CTkLabel(master=fundo_preto2, text=informacoes['definicao'], font=("Roboto", 12), fg_color=COLORS["azul escuro"], text_color=COLORS["Branco suave"], wraplength=400, justify="left", corner_radius=70, width=0, height=50)
@@ -80,18 +85,13 @@ definicao.grid(
     padx=20)
 
 ECPUC = ctk.CTkLabel(master=fundo_preto2, text="EXPLIQUE COMO PARA UMA CRIANÇA", font=("Roboto", 10), text_color=COLORS["Cinza azulado"], height=1, width=1,)
-ECPUC.place(
-    x=18,
-    y=definicao.winfo_y() + definicao.winfo_height() + 60
-)
 
 #ANALOGIA
+largura_container = fundo_preto2.cget("width")
+pad_horizontal = 20 * 2
+fonte_analogia = ctk.CTkFont(family="Roboto", size=12, slant="roman")
 analogia_texto = ctk.CTkLabel(master=fundo_preto2, text="ANALOGIA", font=("Roboto", 10), text_color=COLORS["Cinza azulado"], height=1, width=1,)
-analogia_texto.place(
-    x=18,
-    y=analogia_texto.winfo_y() + analogia_texto.winfo_height() + 155
-)
-analogia = ctk.CTkLabel(master=fundo_preto2, text=informacoes['analogia'], font=("Roboto", 12,'italic'), justify="left", wraplength=400)
+analogia = ctk.CTkLabel(master=fundo_preto2, text=informacoes['analogia'], font=fonte_analogia, justify="left", wraplength= largura_container - pad_horizontal , height= 4)
 analogia.grid(row = 2,column=0,pady=(35,0), padx=20, sticky="w")
 
 #ONDE VOCÊ VÊ ESSA PALAVRA
@@ -106,12 +106,6 @@ exemplo1.grid(
     column=0,
     sticky="w"
     )
-
-onde_voce_ve.place(
-    x=18,
-    y=exemplo1.winfo_y() + exemplo1.winfo_height() + 213
-)
-
 #EXEMPLO2
 exemplo2 = ctk.CTkLabel(master=fundo_preto2, text=informacoes['exemplo2'], font=("Roboto", 12), text_color=COLORS["azul"], wraplength=400, justify="left")
 exemplo2.grid(
@@ -134,29 +128,68 @@ exemplo3.grid(
 
 #ETIMOLOGIA
 etm_text = ctk.CTkLabel(master=fundo_preto2, text='ETIMOLOGIA (COMPLEMENTAR)', font=("Roboto", 10), text_color = COLORS['Cinza azulado'])
-
-
-etimologia = ctk.CTkLabel(master=fundo_preto2, text=informacoes.get('etimologia', 'etmologia não disponível'), font=("Roboto", 11), fg_color=COLORS['azul escuro'], width= 425, height= 60, wraplength= 400, justify = 'left')
+wrap = largura_container -pad_horizontal
+etimologia_font = ctk.CTkFont("Roboto", 11)
+etimologia = ctk.CTkLabel(master=fundo_preto2, text=informacoes['etimologia'], font=etimologia_font, fg_color=COLORS['azul escuro'], width= etimologia_font.measure(informacoes['etimologia']) + 5 if etimologia_font.measure(informacoes['etimologia'])  < largura_container else  largura_container - pad_horizontal, wraplength= wrap, justify = 'left', height= etimologia_font.measure(informacoes['etimologia']) / wrap * 20)
 etimologia.grid(
-    pady=20,
+    pady=(20),
     padx=20,
     row = 6,
     column = 0,
     sticky = 'w')
 
-etm_text.place(
-    x=18,
-    y=etimologia.winfo_y() + etimologia.winfo_height() + 300
-)
-
 #SINONIMOS
 sin_text = ctk.CTkLabel(master=fundo_preto2, text='SINÔNIMOS', font=("Roboto", 10), text_color=COLORS['Cinza azulado'], height = 0)
-sin_text.place(
+
+#update das informações
+app.update_idletasks()
+
+y_sinonimoslabel = etimologia.winfo_y() + etimologia.winfo_height() + 10
+#TODOS OS PLACES ---------------------------------------------------
+# place EXPLIQUE COMO PARA UMA CRIANÇA
+ECPUC.place(
     x=18,
-    y=analogia.winfo_y() + analogia.winfo_height() + 395
+    y=definicao.winfo_y() - 15
 )
 
+#place ANALOGIA
+analogia_texto.place(
+    x=18,
+    y=analogia.winfo_y() - 15
+)
+
+
+#place ONDE VOCÊ VÊ
+onde_voce_ve.place(
+    x=18,
+    y=exemplo1.winfo_y()- 15
+)
+
+#place DESCRIÇÃO
+descricao.place(
+x=20,
+y=palavra.winfo_y() + palavra.winfo_height() - 3,
+      )
+
+
+#place ETIMOLOGIA
+etm_text.place(
+    x=18,
+    y=etimologia.winfo_y() - 23
+)
+
+
+#place SINONIMOS
+sin_text.place(
+    x=18,
+    y= y_sinonimoslabel
+)
+
+x_atual = 20
+fonte_sinonimo = ctk.CTkFont(family="Roboto", size=10) 
+# usando ctk font para que a fonte exibida seja a mesma medida no cálculo
 for i, sinonimo in enumerate(sinonimos_list):
+    tamanho = fonte_sinonimo.measure(sinonimo) + 20
     sinonimos_text = ctk.CTkLabel(
         master=fundo_preto2,
         text=sinonimo,
@@ -165,10 +198,17 @@ for i, sinonimo in enumerate(sinonimos_list):
         fg_color=COLORS["azul escuro"],
         corner_radius=60,
         height = 20,
-        width = len(sinonimo) * 5
+        width = tamanho
     )
     sinonimos_text.place(
-        y = 410,
-        x  =(i ) * 75 + 20,
-        )
+        y = y_sinonimoslabel + 20,
+        x=x_atual
+    )
+    x_atual = x_atual + tamanho + 10
+
+largura_necessaria = fundo_preto2.winfo_reqwidth()
+altura_necessaria = fundo_preto2.winfo_reqheight()
+app.geometry(f"{largura_necessaria + 10}x{altura_necessaria + 50}")
+
 app.mainloop()
+
